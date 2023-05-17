@@ -49,7 +49,7 @@ class UrlRedirectorServiceProvider extends ServiceProvider
 
             $this->app[ExceptionHandler::class]->renderable(function (Throwable $throwable, Request $request) {
                 if ($throwable instanceof NotFoundHttpException) {
-                    $url = UrlRedirector::query()->where('original', $request->fullUrl())->first();
+                    $url = UrlRedirector::query()->where('original', $request->url())->first();
 
                     if ($url) {
                         $url->increment('visits');
