@@ -1,10 +1,12 @@
 # Botble URL Redirector
 
-TODO
+URL Redirector is a plugin for Botble CMS that allows you to create the redirection rules when the URL not found.
+
+![](screenshot.png)
 
 ## Requirements
 
-- Botble core 6.0 or higher.
+- Botble core 6.5.5 or higher.
 
 ## Installation
 
@@ -18,9 +20,9 @@ Go to the **Admin Panel** and click on the **Plugins** tab. Click on the "Add ne
 2. Extract the downloaded file and upload the extracted folder to the `platform/plugins` directory.
 3. Go to **Admin** > **Plugins** and click on the **Activate** button.
 
-## Changelog
+## Usage
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+- Please create some redirection rules in Admin > Settings > URL Redirector
 
 ## Contributing
 

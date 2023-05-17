@@ -6,5 +6,6 @@
     "author": "Archi Elite Technologies",
     "url": "https://archielite.com",
     "version": "1.0.0",
-    "description": "Redirect URLs to another location with ease"
+    "description": "Redirect URLs to another location with ease",
+    "minimum_core_version": "6.5.5"
 }
