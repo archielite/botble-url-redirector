@@ -1,0 +1,10 @@
+{
+    "id": "archielite/url-redirector",
+    "name": "URL Redirector",
+    "namespace": "ArchiElite\\UrlRedirector\\",
+    "provider": "ArchiElite\\UrlRedirector\\Providers\\UrlRedirectorServiceProvider",
+    "author": "Archi Elite Technologies",
+    "url": "https://archielite.com",
+    "version": "1.0.0",
+    "description": "Redirect URLs to another location with ease"
+}
