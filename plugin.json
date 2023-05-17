@@ -5,7 +5,7 @@
     "provider": "ArchiElite\\UrlRedirector\\Providers\\UrlRedirectorServiceProvider",
     "author": "Archi Elite Technologies",
     "url": "https://archielite.com",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Redirect URLs to another location with ease",
     "minimum_core_version": "6.5.5"
 }
