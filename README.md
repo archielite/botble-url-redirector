@@ -6,7 +6,7 @@ URL Redirector is a plugin for Botble CMS that allows you to create the redirect
 
 ## Requirements
 
-- Botble core 6.5.5 or higher.
+- Botble core 7.0 or higher.
 
 ## Installation
 

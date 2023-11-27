@@ -1,10 +1,10 @@
 <?php
 
-use Botble\Base\Facades\BaseHelper;
+use Botble\Base\Facades\AdminHelper;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['namespace' => 'ArchiElite\UrlRedirector\Http\Controllers', 'middleware' => ['web', 'core']], function () {
-    Route::group(['prefix' => BaseHelper::getAdminPrefix(), 'middleware' => 'auth'], function () {
+Route::group(['namespace' => 'ArchiElite\UrlRedirector\Http\Controllers'], function () {
+    AdminHelper::registerRoutes(function () {
         Route::group(['prefix' => 'url-redirector', 'as' => 'url-redirector.'], function () {
             Route::resource('', 'UrlRedirectorController')->parameters(['' => 'url']);
 

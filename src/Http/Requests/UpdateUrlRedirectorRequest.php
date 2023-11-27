@@ -16,7 +16,7 @@ class UpdateUrlRedirectorRequest extends Request
                 'url',
                 Rule::unique('url_redirector')->ignoreModel($this->route('url')),
             ],
-            'target' => 'required|max:255|url|different:original',
+            'target' => ['required', 'max:255', 'url', 'different:original'],
         ];
     }
 }

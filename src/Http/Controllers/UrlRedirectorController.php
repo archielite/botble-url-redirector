@@ -2,21 +2,16 @@
 
 namespace ArchiElite\UrlRedirector\Http\Controllers;
 
-use Botble\Base\Events\CreatedContentEvent;
-use Botble\Base\Events\DeletedContentEvent;
-use Botble\Base\Events\UpdatedContentEvent;
+use ArchiElite\UrlRedirector\Tables\UrlRedirectorTable;
 use Botble\Base\Facades\PageTitle;
 use Botble\Base\Forms\FormBuilder;
+use Botble\Base\Http\Actions\DeleteResourceAction;
 use Botble\Base\Http\Controllers\BaseController;
-use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Base\Traits\HasDeleteManyItemsTrait;
 use ArchiElite\UrlRedirector\Forms\UrlRedirectorForm;
-use ArchiElite\UrlRedirector\Http\Requests\StoreUrlRedirectorRequest;
 use ArchiElite\UrlRedirector\Http\Requests\UpdateUrlRedirectorRequest;
 use ArchiElite\UrlRedirector\Models\UrlRedirector;
 use ArchiElite\UrlRedirector\Repositories\Interfaces\UrlRedirectorInterface;
-use ArchiElite\UrlRedirector\Tables\UrlRedirectorTable;
-use Exception;
 use Illuminate\Http\Request;
 
 class UrlRedirectorController extends BaseController
@@ -25,33 +20,34 @@ class UrlRedirectorController extends BaseController
 
     public function __construct(protected UrlRedirectorInterface $urlRedirectorRepository)
     {
+        $this
+            ->breadcrumb()
+            ->add(trans('plugins/url-redirector::url-redirector.menu'),  route('url-redirector.index'));
     }
 
     public function index(UrlRedirectorTable $dataTable)
     {
-        PageTitle::setTitle(trans('plugins/url-redirector::url-redirector.menu'));
+        $this->pageTitle(trans('plugins/url-redirector::url-redirector.menu'));
 
         return $dataTable->renderTable();
     }
 
-    public function create(FormBuilder $formBuilder)
+    public function create()
     {
-        PageTitle::setTitle(trans('plugins/url-redirector::url-redirector.create'));
+        $this->pageTitle(trans('plugins/url-redirector::url-redirector.create'));
 
-        return $formBuilder->create(UrlRedirectorForm::class)->renderForm();
+        return UrlRedirectorForm::create()->renderForm();
     }
 
-    public function store(StoreUrlRedirectorRequest $request, BaseHttpResponse $response)
+    public function store()
     {
-        $data = $request->validated();
+        $form = UrlRedirectorForm::create();
+        $form->save();
 
-        $url = $this->urlRedirectorRepository->createOrUpdate($data);
-
-        event(new CreatedContentEvent(URL_REDIRECTOR_MODULE_SCREEN_NAME, $request, $url));
-
-        return $response
+        return  $this
+            ->httpResponse()
             ->setPreviousUrl(route('url-redirector.index'))
-            ->setNextUrl(route('url-redirector.edit', $url->id))
+            ->setNextUrl(route('url-redirector.edit', $form->getModel()->getKey()))
             ->setMessage(trans('core/base::notices.create_success_message'));
     }
 
@@ -65,35 +61,25 @@ class UrlRedirectorController extends BaseController
             ->renderForm();
     }
 
-    public function update(UrlRedirector $url, UpdateUrlRedirectorRequest $request, BaseHttpResponse $response)
+    public function update(UrlRedirector $url, UpdateUrlRedirectorRequest $request)
     {
-        $url->fill($request->input());
+        UrlRedirectorForm::createFromModel($url)
+            ->setRequest($request)
+            ->save();
 
-        $this->urlRedirectorRepository->createOrUpdate($url);
-        event(new UpdatedContentEvent(URL_REDIRECTOR_MODULE_SCREEN_NAME, $request, $url));
-
-        return $response
+        return $this
+            ->httpResponse()
             ->setPreviousUrl(route('url-redirector.index'))
             ->setMessage(trans('core/base::notices.update_success_message'));
     }
 
-    public function destroy(UrlRedirector $url, Request $request, BaseHttpResponse $response)
+    public function destroy(UrlRedirector $url)
     {
-        try {
-            $this->urlRedirectorRepository->delete($url);
-
-            event(new DeletedContentEvent(URL_REDIRECTOR_MODULE_SCREEN_NAME, $request, $url));
-
-            return $response->setMessage(trans('core/base::notices.delete_success_message'));
-        } catch (Exception $exception) {
-            return $response
-                ->setError()
-                ->setMessage($exception->getMessage());
-        }
+        return DeleteResourceAction::make($url);
     }
 
-    public function deletes(Request $request, BaseHttpResponse $response)
+    public function deletes(Request $request)
     {
-        return $this->executeDeleteItems($request, $response, $this->urlRedirectorRepository, URL_REDIRECTOR_MODULE_SCREEN_NAME);
+        return $this->executeDeleteItems($request, $this->httpResponse(), $this->urlRedirectorRepository, URL_REDIRECTOR_MODULE_SCREEN_NAME);
     }
 }
