@@ -2,14 +2,9 @@
 
 namespace ArchiElite\UrlRedirector\Providers;
 
-use Botble\Base\Facades\PanelSectionManager;
-use Botble\Base\PanelSections\PanelSectionItem;
+use Botble\Base\Facades\DashboardMenu;
 use Botble\Base\Traits\LoadAndPublishDataTrait;
-use ArchiElite\UrlRedirector\Repositories\Interfaces\UrlRedirectorInterface;
 use ArchiElite\UrlRedirector\Models\UrlRedirector;
-use ArchiElite\UrlRedirector\Repositories\Caches\UrlRedirectorCacheDecorator;
-use ArchiElite\UrlRedirector\Repositories\Eloquent\UrlRedirectorRepository;
-use Botble\Setting\PanelSections\SettingOthersPanelSection;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Events\RouteMatched;
@@ -23,9 +18,6 @@ class UrlRedirectorServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->app->bind(UrlRedirectorInterface::class, function () {
-            return new UrlRedirectorCacheDecorator(new UrlRedirectorRepository(new UrlRedirector()));
-        });
     }
 
     public function boot(): void
@@ -39,16 +31,16 @@ class UrlRedirectorServiceProvider extends ServiceProvider
             ->loadAndPublishTranslations()
             ->loadMigrations();
 
-        PanelSectionManager::default()->beforeRendering(function () {
-            PanelSectionManager::registerItem(
-                SettingOthersPanelSection::class,
-                fn () => PanelSectionItem::make('url_redirector')
-                    ->setTitle(trans('plugins/url-redirector::url-redirector.menu'))
-                    ->withIcon('ti ti-external-link')
-                    ->withDescription(trans('plugins/url-redirector::url-redirector.description'))
-                    ->withPriority(10000)
-                    ->withRoute('url-redirector.index')
-            );
+        DashboardMenu::default()->beforeRetrieving(function () {
+            DashboardMenu::registerItem([
+                'id' => 'cms-plugins-url_redirector',
+                'priority' => 910,
+                'parent_id' => null,
+                'name' => 'plugins/url-redirector::url-redirector.menu',
+                'icon' => 'ti ti-external-link',
+                'url' => route('url-redirector.index'),
+                'permissions' => ['url-redirector.index'],
+            ]);
         });
 
         $this->app['events']->listen(RouteMatched::class, function () {

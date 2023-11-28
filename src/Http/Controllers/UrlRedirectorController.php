@@ -7,22 +7,17 @@ use Botble\Base\Facades\PageTitle;
 use Botble\Base\Forms\FormBuilder;
 use Botble\Base\Http\Actions\DeleteResourceAction;
 use Botble\Base\Http\Controllers\BaseController;
-use Botble\Base\Traits\HasDeleteManyItemsTrait;
 use ArchiElite\UrlRedirector\Forms\UrlRedirectorForm;
 use ArchiElite\UrlRedirector\Http\Requests\UpdateUrlRedirectorRequest;
 use ArchiElite\UrlRedirector\Models\UrlRedirector;
-use ArchiElite\UrlRedirector\Repositories\Interfaces\UrlRedirectorInterface;
-use Illuminate\Http\Request;
 
 class UrlRedirectorController extends BaseController
 {
-    use HasDeleteManyItemsTrait;
-
-    public function __construct(protected UrlRedirectorInterface $urlRedirectorRepository)
+    public function __construct()
     {
         $this
             ->breadcrumb()
-            ->add(trans('plugins/url-redirector::url-redirector.menu'),  route('url-redirector.index'));
+            ->add(trans('plugins/url-redirector::url-redirector.menu'), route('url-redirector.index'));
     }
 
     public function index(UrlRedirectorTable $dataTable)
@@ -76,10 +71,5 @@ class UrlRedirectorController extends BaseController
     public function destroy(UrlRedirector $url)
     {
         return DeleteResourceAction::make($url);
-    }
-
-    public function deletes(Request $request)
-    {
-        return $this->executeDeleteItems($request, $this->httpResponse(), $this->urlRedirectorRepository, URL_REDIRECTOR_MODULE_SCREEN_NAME);
     }
 }

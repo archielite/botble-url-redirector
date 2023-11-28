@@ -10,6 +10,7 @@ use Botble\Table\BulkActions\DeleteBulkAction;
 use Botble\Table\BulkChanges\NameBulkChange;
 use Botble\Table\Columns\Column;
 use Botble\Table\Columns\IdColumn;
+use Botble\Table\Columns\LinkableColumn;
 use Botble\Table\HeaderActions\CreateHeaderAction;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
@@ -24,8 +25,9 @@ class UrlRedirectorTable extends TableAbstract
                 IdColumn::make(),
                 Column::make('original')
                     ->label(trans('plugins/url-redirector::url-redirector.original')),
-                Column::make('target')
-                    ->label(trans('plugins/url-redirector::url-redirector.target')),
+                LinkableColumn::make('target')
+                    ->label(trans('plugins/url-redirector::url-redirector.target'))
+                    ->externalLink(),
                 Column::make('visits')
                     ->label(trans('plugins/url-redirector::url-redirector.visits')),
             ])
