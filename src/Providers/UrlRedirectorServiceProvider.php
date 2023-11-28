@@ -35,11 +35,9 @@ class UrlRedirectorServiceProvider extends ServiceProvider
             DashboardMenu::registerItem([
                 'id' => 'cms-plugins-url_redirector',
                 'priority' => 910,
-                'parent_id' => null,
                 'name' => 'plugins/url-redirector::url-redirector.menu',
                 'icon' => 'ti ti-external-link',
-                'url' => route('url-redirector.index'),
-                'permissions' => ['url-redirector.index'],
+                'route' => 'url-redirector.index',
             ]);
         });
 
