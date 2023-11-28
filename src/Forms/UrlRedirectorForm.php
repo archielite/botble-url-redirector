@@ -16,13 +16,13 @@ class UrlRedirectorForm extends FormAbstract
             ->withCustomFields()
             ->add('original', 'text', [
                 'label' => trans('plugins/url-redirector::url-redirector.original'),
-                'label_attr' => ['class' => 'control-label required'],
-                'attr' => ['placeholder' => 'https://www.example.com'],
+                'required' => true,
+                'attr' => ['placeholder' => 'https://www.example-original.com'],
             ])
             ->add('target', 'text', [
                 'label' => trans('plugins/url-redirector::url-redirector.target'),
-                'label_attr' => ['class' => 'control-label required'],
-                'attr' => ['placeholder' => 'https://www.example.com'],
+                'required' => true,
+                'attr' => ['placeholder' => 'https://www.example-target.com'],
             ]);
     }
 }

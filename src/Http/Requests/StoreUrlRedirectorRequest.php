@@ -15,7 +15,7 @@ class StoreUrlRedirectorRequest extends Request
                 'url',
                 'unique:url_redirector',
             ],
-            'target' => 'required|max:255|url|different:original',
+            'target' => ['required', 'max:255', 'url', 'different:original'],
         ];
     }
 }
