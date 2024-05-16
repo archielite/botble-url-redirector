@@ -2,8 +2,8 @@
 
 namespace ArchiElite\UrlRedirector\Http\Controllers;
 
+use ArchiElite\UrlRedirector\Http\Requests\StoreUrlRedirectorRequest;
 use ArchiElite\UrlRedirector\Tables\UrlRedirectorTable;
-use Botble\Base\Facades\PageTitle;
 use Botble\Base\Forms\FormBuilder;
 use Botble\Base\Http\Actions\DeleteResourceAction;
 use Botble\Base\Http\Controllers\BaseController;
@@ -34,12 +34,13 @@ class UrlRedirectorController extends BaseController
         return UrlRedirectorForm::create()->renderForm();
     }
 
-    public function store()
+    public function store(StoreUrlRedirectorRequest $request)
     {
-        $form = UrlRedirectorForm::create();
+        $form = UrlRedirectorForm::create()->setRequest($request);
+
         $form->save();
 
-        return  $this
+        return $this
             ->httpResponse()
             ->setPreviousUrl(route('url-redirector.index'))
             ->setNextUrl(route('url-redirector.edit', $form->getModel()->getKey()))
@@ -48,7 +49,7 @@ class UrlRedirectorController extends BaseController
 
     public function edit(UrlRedirector $url, FormBuilder $formBuilder)
     {
-        PageTitle::setTitle(trans('core/base::forms.edit_item', ['name' => $url->original]));
+        $this->pageTitle(trans('core/base::forms.edit_item', ['name' => $url->original]));
 
         return $formBuilder
             ->create(UrlRedirectorForm::class, ['model' => $url])

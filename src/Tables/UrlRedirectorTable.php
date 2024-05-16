@@ -9,6 +9,7 @@ use Botble\Table\Actions\EditAction;
 use Botble\Table\BulkActions\DeleteBulkAction;
 use Botble\Table\BulkChanges\NameBulkChange;
 use Botble\Table\Columns\Column;
+use Botble\Table\Columns\FormattedColumn;
 use Botble\Table\Columns\IdColumn;
 use Botble\Table\Columns\LinkableColumn;
 use Botble\Table\HeaderActions\CreateHeaderAction;
@@ -23,11 +24,16 @@ class UrlRedirectorTable extends TableAbstract
             ->addHeaderAction(CreateHeaderAction::make()->url(route('url-redirector.create')))
             ->addColumns([
                 IdColumn::make(),
-                Column::make('original')
-                    ->label(trans('plugins/url-redirector::url-redirector.original')),
+                LinkableColumn::make('original')
+                    ->label(trans('plugins/url-redirector::url-redirector.original'))
+                    ->externalLink()
+                    ->limit(30)
+                    ->copyable(),
                 LinkableColumn::make('target')
                     ->label(trans('plugins/url-redirector::url-redirector.target'))
-                    ->externalLink(),
+                    ->externalLink()
+                    ->limit(30)
+                    ->copyable(),
                 Column::make('visits')
                     ->label(trans('plugins/url-redirector::url-redirector.visits')),
             ])

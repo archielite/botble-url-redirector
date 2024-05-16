@@ -2,12 +2,12 @@
 
 namespace ArchiElite\UrlRedirector\Providers;
 
+use ArchiElite\UrlRedirector\Models\UrlRedirector;
 use Botble\Base\Facades\DashboardMenu;
 use Botble\Base\Traits\LoadAndPublishDataTrait;
-use ArchiElite\UrlRedirector\Models\UrlRedirector;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Events\RouteMatched;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\ServiceProvider;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -41,18 +41,19 @@ class UrlRedirectorServiceProvider extends ServiceProvider
             ]);
         });
 
-        $this->app['events']->listen(RouteMatched::class, function () {
-            $this->app[ExceptionHandler::class]->renderable(function (Throwable $throwable, Request $request) {
-                if ($throwable instanceof NotFoundHttpException) {
-                    $url = UrlRedirector::query()->where('original', $request->url())->first();
+        $this->app[ExceptionHandler::class]->renderable(function (Throwable $throwable, Request $request) {
+            if ($throwable instanceof NotFoundHttpException) {
+                $url = UrlRedirector::query()->where('original', $request->url())->first();
 
-                    if ($url) {
-                        $url->increment('visits');
-
-                        return redirect()->to($url->target, 301);
-                    }
+                if ($url) {
+                    return tap(
+                        Redirect::to($url->target),
+                        fn () => UrlRedirector::withoutTimestamps(function () use ($url) {
+                            $url->increment('visits');
+                        })
+                    );
                 }
-            });
+            }
         });
     }
 }
