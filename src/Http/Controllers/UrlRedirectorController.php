@@ -2,14 +2,14 @@
 
 namespace ArchiElite\UrlRedirector\Http\Controllers;
 
+use ArchiElite\UrlRedirector\Forms\UrlRedirectorForm;
 use ArchiElite\UrlRedirector\Http\Requests\StoreUrlRedirectorRequest;
+use ArchiElite\UrlRedirector\Http\Requests\UpdateUrlRedirectorRequest;
+use ArchiElite\UrlRedirector\Models\UrlRedirector;
 use ArchiElite\UrlRedirector\Tables\UrlRedirectorTable;
 use Botble\Base\Forms\FormBuilder;
 use Botble\Base\Http\Actions\DeleteResourceAction;
 use Botble\Base\Http\Controllers\BaseController;
-use ArchiElite\UrlRedirector\Forms\UrlRedirectorForm;
-use ArchiElite\UrlRedirector\Http\Requests\UpdateUrlRedirectorRequest;
-use ArchiElite\UrlRedirector\Models\UrlRedirector;
 
 class UrlRedirectorController extends BaseController
 {

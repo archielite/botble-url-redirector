@@ -9,7 +9,6 @@ use Botble\Table\Actions\EditAction;
 use Botble\Table\BulkActions\DeleteBulkAction;
 use Botble\Table\BulkChanges\NameBulkChange;
 use Botble\Table\Columns\Column;
-use Botble\Table\Columns\FormattedColumn;
 use Botble\Table\Columns\IdColumn;
 use Botble\Table\Columns\LinkableColumn;
 use Botble\Table\HeaderActions\CreateHeaderAction;
